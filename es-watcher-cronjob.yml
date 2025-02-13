@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: es-watcher-cronjob
+  namespace: elastic-stack
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: es-watcher-sa
+          containers:
+          - name: es-watcher
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/bash
+            - -c
+            - /config/watcher.sh
+            volumeMounts:
+            - name: config
+              mountPath: /config
+          restartPolicy: OnFailure
+          volumes:
+          - name: config
+            configMap:
+              name: es-watcher-config
+              defaultMode: 493
