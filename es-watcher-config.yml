@@ -5,7 +5,7 @@ metadata:
   namespace: elastic-stack
 data:
   watcher.sh: |
-    #!/bin/bash
+    #!/bin/sh
     set -e
     kubectl -n elastic-stack get pods --field-selector=status.phase=Pending -o json | \
     jq -r '.items[] | select(.status.containerStatuses[].state.waiting.reason=="CreateContainerError") | .metadata.name' | \

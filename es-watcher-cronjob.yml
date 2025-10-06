@@ -4,7 +4,7 @@ metadata:
   name: es-watcher-cronjob
   namespace: elastic-stack
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "* */4 * * *"
   jobTemplate:
     spec:
       template:
@@ -12,11 +12,11 @@ spec:
           serviceAccountName: es-watcher-sa
           containers:
           - name: es-watcher
-            image: bitnami/kubectl:latest
+            image: alpine:latest
             command:
-            - /bin/bash
+            - /bin/sh
             - -c
-            - /config/watcher.sh
+            - apk add kubectl jq && /config/watcher.sh
             volumeMounts:
             - name: config
               mountPath: /config
